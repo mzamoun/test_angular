@@ -1,0 +1,14 @@
+# stage 1
+FROM node:latest as node
+WORKDIR /app
+# COPY *.json src   /app/
+COPY .   /app/
+
+# RUN npm install -g @angular/cli
+RUN npm install
+RUN npm run build --prod
+# stage 2
+FROM nginx:alpine
+COPY --from=node /app/dist/test_angular /usr/share/nginx/html
+ENV LISTEN_PORT 8080
+EXPOSE 8080
